@@ -194,6 +194,49 @@ async function filtrarArvore(page: Page, perfil: PerfilTribunal, termo: string) 
   await page.waitForTimeout(1800);
 }
 
+/**
+ * O filtro do eproc devolve o no que casa com o termo, mas FECHADO: se ele nao e folha, os filhos
+ * (que nao tem o termo no nome) ficam de fora e o advogado nao ve o que pode escolher.
+ * Aqui abrimos, pela API do proprio jsTree (open_node — so carrega filhos, nao altera o formulario),
+ * os nos fechados cujo texto contem o termo e, em seguida, os descendentes deles. Ate 4 niveis.
+ * Ramos que so aparecem como ancestrais (ex.: "DIREITO DO CONSUMIDOR" num filtro "Bancarios") nao abrem.
+ */
+async function expandirRamosDoTermo(page: Page, termo: string) {
+  const script = (alvo: string, base: string[]) => `(function () {
+    var c = document.querySelector('#divArvore') || document.querySelector('.jstree');
+    var jq = window.jQuery || window.$;
+    if (!c || !jq || !jq.jstree) return '[]';
+    var t = jq.jstree.reference(c);
+    if (!t) return '[]';
+    function n(s) { return String(s || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toUpperCase(); }
+    var alvo = ${JSON.stringify(alvo)};
+    var base = ${JSON.stringify(base)};
+    var abrir = [];
+    var lis = c.querySelectorAll('li.jstree-node.jstree-closed');
+    for (var i = 0; i < lis.length; i++) {
+      var id = lis[i].id; if (!id) continue;
+      var a = document.getElementById(id + '_anchor');
+      var txt = n(a ? a.textContent : '');
+      var no = t.get_node(id);
+      var desc = no && (no.parents || []).some(function (p) { return base.indexOf(p) >= 0; });
+      if (txt.indexOf(alvo) >= 0 || desc) { t.open_node(id); abrir.push(id); }
+    }
+    return JSON.stringify(abrir);
+  })()`;
+  const alvo = termo.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
+  let abertos: string[] = [];
+  for (let nivel = 0; nivel < 4; nivel++) {
+    let novos: string[] = [];
+    try { novos = JSON.parse(String(await page.evaluate(script(alvo, abertos)))); } catch { novos = []; }
+    novos = novos.filter((id) => !abertos.includes(id));
+    if (!novos.length) break;
+    log(`abrindo ${novos.length} ramo(s) da arvore: ${novos.join(", ")}`);
+    abertos = abertos.concat(novos);
+    await page.waitForLoadState("networkidle").catch(() => {});
+    await page.waitForTimeout(1500);
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Resolucao automatica de assunto por comarca+area
 // ---------------------------------------------------------------------------
@@ -261,6 +304,7 @@ export async function listarAssuntos(
 
   await (await achar(page, perfil, "assuntoRadio", "assuntos")).check().catch(() => {});
   await filtrarArvore(page, perfil, termo);
+  await expandirRamosDoTermo(page, termo);
   const lista = await dumparArvore(page);
 
   // Nao deixar rascunho para tras. O confirm do Cancelar e aceito pelo handler de dialogo.
