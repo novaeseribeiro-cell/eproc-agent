@@ -2,7 +2,7 @@ import "./env.js";   // primeiro de todos: popula process.env antes de qualquer 
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
 import type { BrowserContext, Page } from "playwright";
-import { abrirNavegador } from "./browser.js";
+import { abrirNavegador, entrarModoConferencia } from "./browser.js";
 import { prepararAcao, abrirPeticaoInicial, lerPreparadas, listarAssuntos, chaveAssunto, lerResolucoes, gravarResolucao } from "./agent.js";
 import { carregar, salvar, capturarComarca, validar } from "./catalogo.js";
 import { loginManual as garantirLogin } from "./login-manual.js";
@@ -74,22 +74,27 @@ async function main() {
     writeFileSync(`${pasta}/relatorio.json`, JSON.stringify(rel, null, 2));
     await notificar(rel);
     console.log(JSON.stringify(rel, null, 2));
-    // Nao fecha o navegador: a tela fica aberta para o advogado conferir e protocolar.
+    // Nao fecha o navegador: a tela fica aberta para o advogado conferir.
+    // Ctrl+C mata o Chromium junto (mesmo grupo de processos) — por isso o fim e "fechar a janela".
+    entrarModoConferencia();
     if (rel.status === "salvo_distribuicao_futura")
       console.log(
         "\nAcao PREPARADA, nao distribuida. Abra Painel > Area de trabalho > Pendencias >\n" +
         '"Processos pendentes do advogado", confira e clique em Distribuir. `npm run preparadas` lista a fila.',
       );
     else if (rel.status === "pronto_para_conferencia")
-      console.log("\nNavegador mantido aberto. Confira e, se estiver tudo certo, clique em Finalizar (etapa 5). Ctrl+C encerra o agente (a aba continua).");
+      console.log("\nPronto para conferencia na janela aberta (etapa 5). Nada foi protocolado.");
     else
       console.log("\nExecucao terminou em ERRO. Veja a mensagem acima e o print 99-ERRO. Nada foi protocolado.");
     console.log(
-      "ATENCAO: enquanto este processo estiver rodando, TODA caixa de confirmacao desse navegador e\n" +
-      "aceita automaticamente e so aparece aqui no log. Se voce clicar em Cancelar ou no X de excluir\n" +
-      "documento, vai acontecer sem perguntar. Encerre com Ctrl+C antes de mexer a mao na tela.",
+      "\nA tela agora e sua. O agente NAO aceita mais nenhuma confirmacao sozinho: se o eproc perguntar\n" +
+      "algo, a pergunta aparece AQUI e so vale se voce digitar s + ENTER.\n" +
+      "NAO use Ctrl+C: ele fecha o navegador junto e o preenchimento se perde.\n" +
+      "Quando terminar, feche a janela do navegador — o agente encerra sozinho.",
     );
-    await new Promise(() => {});
+    await new Promise<void>((r) => ctx!.on("close", () => r()));
+    console.log("[eproc-agent] navegador fechado pelo advogado. Encerrado.");
+    ctx = null;
 
   } else if (cmd === "assuntos") {
     // uso: npm run assuntos -- exemplos/pedido-exemplo.json "Contratos Bancários"

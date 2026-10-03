@@ -23,10 +23,34 @@ export function dialogosDesde(marca: number): string[] { return dialogosAceitos.
  * Foi a causa raiz do "X nao exclui documento": excluirDocumento() chama alert_excluir(),
  * que chama confirm(). Com o dialogo dispensado, o AJAX de exclusao jamais era enviado.
  */
+let modoConferencia = false;
+
+/**
+ * Depois que o agente termina, a tela e do advogado. Nenhum dialogo e aceito sozinho:
+ * cada confirm()/alert() aparece no terminal e so e aceito se o advogado digitar "s".
+ * Necessario porque Ctrl+C encerra o Node E o Chromium filho (a aba some junto).
+ */
+export function entrarModoConferencia() { modoConferencia = true; }
+
+function perguntarNoTerminal(texto: string): Promise<boolean> {
+  return new Promise((r) => {
+    console.log(`\n[eproc-agent] O eproc pergunta:\n  ${texto.replace(/\n/g, "\n  ")}\nDigite s + ENTER para CONFIRMAR, ou so ENTER para recusar:`);
+    process.stdin.resume();
+    process.stdin.once("data", (b) => { process.stdin.pause(); r(/^\s*s/i.test(String(b))); });
+  });
+}
+
 function armarDialogos(ctx: BrowserContext) {
   const armar = (p: Page) => {
     p.on("dialog", async (d) => {
       const linha = `${d.type()}: ${d.message()}`;
+      if (modoConferencia) {
+        if (d.type() === "alert") { console.log(`[eproc-agent] [aviso do eproc] ${d.message()}`); await d.accept().catch(() => {}); return; }
+        const ok = await perguntarNoTerminal(d.message());
+        console.log(`[eproc-agent] [dialogo ${ok ? "CONFIRMADO" : "recusado"} pelo advogado] ${linha}`);
+        await (ok ? d.accept() : d.dismiss()).catch(() => {});
+        return;
+      }
       dialogosAceitos.push(linha);
       console.log(`[eproc-agent] [dialogo aceito] ${linha}`);
       await d.accept().catch(() => {});
