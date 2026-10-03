@@ -374,6 +374,31 @@ Comparacao normaliza acento e caixa, e descarta palavras vazias (DE, DA, DOS...)
 
 ---
 
+## 3.1 Repositorio (03/10/2026)
+
+**https://github.com/novaeseribeiro-cell/eproc-agent** — PRIVADO. Commit inicial `e379a37`, 30 arquivos.
+E a fonte para outro chat ou para a VPS do colega.
+
+Ficam **fora** do versionamento, de proposito, e isso nao e descuido:
+- `.perfil-chromium` — sessao do eproc e estado do certificado do advogado. **Nunca versionar.**
+- `.env` — segredos. O `.env.example` esta no repo, com os campos vazios.
+- `saida/` — prints das telas do eproc com nome e CPF de partes reais.
+- `exemplos/amostra/` — peticao real de cliente.
+- `lote/` — planilha com partes, CPF e valores.
+- `exemplos/pedido-exemplo.json` — pedido com partes reais. O repo leva `pedido-exemplo.template.json`.
+- `dist/` — build.
+
+**Os CPFs do repositorio sao sinteticos.** Antes do primeiro commit os testes e o pedido de exemplo
+tinham CPF e nome reais (inclusive do proprio Roney e da mae dele), e o HANDOFF trazia o nome completo
+da autora da peticao-amostra. Tudo trocado: os testes sao casamento de string e nao dependem do numero.
+Quem for mexer: **nao reintroduza documento real em fixture de teste.**
+
+Para quem clonar: `npm install --include=dev`, copie `.env.example` para `.env` e preencha
+`ANTHROPIC_API_KEY`, copie `exemplos/pedido-exemplo.template.json` para `pedido-exemplo.json` com
+partes que existam na base do tribunal. `npm run teste` roda offline, sem tribunal e sem chave.
+
+---
+
 ## 4. Onde as coisas estao
 
 - Projeto local: `/Users/roneyribeiro/AGENTE EPROC-ESAJ-PJE/eproc-agent` (aspas obrigatorias; NAO usar `:` no nome).
