@@ -127,6 +127,8 @@ export interface AssuntoCatalogado {
   texto: string;
   caminho: string;
   folha: boolean;
+  /** No que o agente tentou abrir e o eproc devolveu filhos incoerentes: nao da para afirmar se e folha. */
+  incerto?: boolean;
 }
 
 /**
@@ -180,8 +182,35 @@ const SCRIPT_ARVORE = `(function () {
   return JSON.stringify(saida);
 })()`;
 
+/**
+ * O caminho e montado pelos PREFIXOS do codigo CNJ (02 > 0219 > 021903 > 02190338), nao pelos
+ * `parents` do jsTree: se o eproc devolver filhos errados num carregamento sob demanda, os parents
+ * ficam corrompidos (visto em 03/10: todo no aparecia sob "DIREITO DO CONSUMIDOR > Responsabilidade
+ * do Fornecedor"). O codigo nao mente sobre a hierarquia.
+ */
+export function caminhoPorCodigo(nos: { codigo: string; texto: string }[]): Map<string, string> {
+  const texto = new Map(nos.map((n) => [n.codigo, n.texto]));
+  const out = new Map<string, string>();
+  for (const n of nos) {
+    const partes: string[] = [];
+    for (let k = 2; k <= n.codigo.length; k += 2) {
+      const t = texto.get(n.codigo.slice(0, k));
+      if (t) partes.push(t);
+    }
+    out.set(n.codigo, partes.join(" > "));
+  }
+  return out;
+}
+
 async function dumparArvore(page: Page): Promise<AssuntoCatalogado[]> {
-  try { return JSON.parse(String(await page.evaluate(SCRIPT_ARVORE))); } catch { return []; }
+  let nos: AssuntoCatalogado[] = [];
+  try { nos = JSON.parse(String(await page.evaluate(SCRIPT_ARVORE))); } catch { return []; }
+  // Codigo repetido = no duplicado pelo carregamento sob demanda. Fica o primeiro.
+  const vistos = new Set<string>();
+  nos = nos.filter((n) => (vistos.has(n.codigo) ? false : (vistos.add(n.codigo), true)));
+  if (!nos.every((n) => /^\d+$/.test(n.codigo))) return nos;
+  const cam = caminhoPorCodigo(nos);
+  return nos.map((n) => ({ ...n, caminho: cam.get(n.codigo) || n.caminho }));
 }
 
 /** Aplica o termo no filtro da arvore e espera o jsTree remontar. */
@@ -201,40 +230,73 @@ async function filtrarArvore(page: Page, perfil: PerfilTribunal, termo: string) 
  * os nos fechados cujo texto contem o termo e, em seguida, os descendentes deles. Ate 4 niveis.
  * Ramos que so aparecem como ancestrais (ex.: "DIREITO DO CONSUMIDOR" num filtro "Bancarios") nao abrem.
  */
-async function expandirRamosDoTermo(page: Page, termo: string) {
-  const script = (alvo: string, base: string[]) => `(function () {
+async function expandirRamosDoTermo(page: Page, perfil: PerfilTribunal, termo: string): Promise<Set<string>> {
+  const fechados = (alvo: string, base: string[]) => `(function () {
     var c = document.querySelector('#divArvore') || document.querySelector('.jstree');
     var jq = window.jQuery || window.$;
     if (!c || !jq || !jq.jstree) return '[]';
     var t = jq.jstree.reference(c);
     if (!t) return '[]';
     function n(s) { return String(s || '').normalize('NFD').replace(/[\\u0300-\\u036f]/g, '').toUpperCase(); }
-    var alvo = ${JSON.stringify(alvo)};
-    var base = ${JSON.stringify(base)};
-    var abrir = [];
+    var alvo = ${JSON.stringify(alvo)}, base = ${JSON.stringify(base)}, out = [];
     var lis = c.querySelectorAll('li.jstree-node.jstree-closed');
     for (var i = 0; i < lis.length; i++) {
       var id = lis[i].id; if (!id) continue;
       var a = document.getElementById(id + '_anchor');
-      var txt = n(a ? a.textContent : '');
-      var no = t.get_node(id);
-      var desc = no && (no.parents || []).some(function (p) { return base.indexOf(p) >= 0; });
-      if (txt.indexOf(alvo) >= 0 || desc) { t.open_node(id); abrir.push(id); }
+      var desc = base.some(function (b) { return id.indexOf(b) === 0 && id !== b; });
+      if (n(a ? a.textContent : '').indexOf(alvo) >= 0 || desc) out.push(id);
     }
-    return JSON.stringify(abrir);
+    return JSON.stringify(out);
   })()`;
-  const alvo = termo.normalize("NFD").replace(/[̀-ͯ]/g, "").toUpperCase();
-  let abertos: string[] = [];
-  for (let nivel = 0; nivel < 4; nivel++) {
-    let novos: string[] = [];
-    try { novos = JSON.parse(String(await page.evaluate(script(alvo, abertos)))); } catch { novos = []; }
-    novos = novos.filter((id) => !abertos.includes(id));
-    if (!novos.length) break;
-    log(`abrindo ${novos.length} ramo(s) da arvore: ${novos.join(", ")}`);
-    abertos = abertos.concat(novos);
+  const abrir = (id: string) => `(function () {
+    var c = document.querySelector('#divArvore') || document.querySelector('.jstree');
+    var t = (window.jQuery || window.$).jstree.reference(c);
+    t.open_node(${JSON.stringify(id)});
+    return 'ok';
+  })()`;
+  // Coerente = todo no da arvore tem codigo numerico, sem repeticao, e o pai (no DOM) e prefixo dele.
+  const coerente = `(function () {
+    var c = document.querySelector('#divArvore') || document.querySelector('.jstree');
+    var lis = c ? c.querySelectorAll('li.jstree-node') : [], vistos = {};
+    for (var i = 0; i < lis.length; i++) {
+      var id = lis[i].id;
+      if (!/^\\d+$/.test(id) || vistos[id]) return false;
+      vistos[id] = 1;
+      var pai = lis[i].parentElement && lis[i].parentElement.closest('li.jstree-node');
+      if (pai && id.indexOf(pai.id) !== 0) return false;
+    }
+    return true;
+  })()`;
+
+  const alvo = termo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+  const abertos: string[] = [];
+  const suspeitos = new Set<string>();
+  for (let rodada = 0; rodada < 60; rodada++) {
+    let pendentes: string[] = [];
+    try { pendentes = JSON.parse(String(await page.evaluate(fechados(alvo, abertos)))); } catch { break; }
+    pendentes = pendentes.filter((id) => !abertos.includes(id) && !suspeitos.has(id) && id.length <= 10);
+    const id = pendentes[0];
+    if (!id) break;
+    await page.evaluate(abrir(id)).catch(() => {});
     await page.waitForLoadState("networkidle").catch(() => {});
     await page.waitForTimeout(1500);
+    if (await page.evaluate(coerente).catch(() => false)) {
+      abertos.push(id);
+      log(`ramo aberto: ${id}`);
+    } else {
+      // O eproc devolveu filhos que nao pertencem a este no. Refaz o filtro (arvore limpa) e nao abre mais ele.
+      suspeitos.add(id);
+      log(`ramo ${id}: o eproc devolveu filhos incoerentes — refazendo o filtro e marcando como incerto`);
+      await filtrarArvore(page, perfil, termo);
+      // Reabre o que ja estava aberto e coerente.
+      for (const a of abertos) {
+        await page.evaluate(abrir(a)).catch(() => {});
+        await page.waitForLoadState("networkidle").catch(() => {});
+        await page.waitForTimeout(1200);
+      }
+    }
   }
+  return suspeitos;
 }
 
 // ---------------------------------------------------------------------------
@@ -304,8 +366,9 @@ export async function listarAssuntos(
 
   await (await achar(page, perfil, "assuntoRadio", "assuntos")).check().catch(() => {});
   await filtrarArvore(page, perfil, termo);
-  await expandirRamosDoTermo(page, termo);
-  const lista = await dumparArvore(page);
+  const suspeitos = await expandirRamosDoTermo(page, perfil, termo);
+  const lista = (await dumparArvore(page)).map((n) =>
+    suspeitos.has(n.codigo) ? { ...n, folha: false, incerto: true } : n);
 
   // Nao deixar rascunho para tras. O confirm do Cancelar e aceito pelo handler de dialogo.
   await (await achar(page, perfil, "cancelarCadastro", "assuntos")).click().catch(() => {});

@@ -103,8 +103,9 @@ async function main() {
     if (!lista.length) console.log(`Nenhum assunto encontrado para "${termo}".`);
     else {
       console.log(`${lista.length} no(s) na arvore para "${termo}" (comarca ${pedido.acao.comarca}, ${pedido.acao.area}):\n`);
-      for (const a of lista) console.log(`${a.folha ? "*" : " "} ${a.codigo}  ${a.caminho}`);
+      for (const a of lista) console.log(`${a.incerto ? "?" : a.folha ? "*" : " "} ${a.codigo}  ${a.caminho}`);
       console.log('\n* = folha (selecionavel como assunto principal). Use o codigo em "assuntoCodigo".');
+      if (lista.some((a) => a.incerto)) console.log('? = o eproc respondeu de forma incoerente ao abrir este no; confira na tela antes de usar.');
     }
     mkdirSync("catalogo", { recursive: true });
     const destino = resolve(`catalogo/assuntos-${termo.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\W+/g, "-").toLowerCase()}.json`);
