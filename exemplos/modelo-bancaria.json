@@ -1,0 +1,72 @@
+{
+  "nome": "Revisional de contrato bancário",
+
+  "_nota": [
+    "Este arquivo é UM MODELO DE AÇÃO. O formato não tem nada de bancário: é o mesmo para",
+    "qualquer tipo de ação repetitiva. O que muda entre tipos é só o conteúdo daqui.",
+    "",
+    "Divisão de responsabilidade:",
+    "  - o que é igual em TODAS as ações deste tipo      -> este arquivo",
+    "  - o que muda de AÇÃO para ação (partes, valor)    -> a planilha do lote",
+    "  - o que muda de COMARCA para comarca (área,       -> o tribunal responde, o agente pergunta",
+    "    classe, código do assunto)",
+    "",
+    "Por isso não há código de assunto fixo aqui. O agente filtra a árvore daquela comarca",
+    "pelo assuntoPrincipal e só aceita se restar UMA folha. Se for ambíguo, para naquela",
+    "comarca e lista os candidatos; você decide uma vez com `npm run assunto:fixar` e o",
+    "código vale para todas as ações daquela comarca."
+  ],
+
+  "preferenciaCompetencia": [
+    { "rito": "RITO ORDINÁRIO (COMUM)",   "area": "Cível - Bancária",       "classeCNJ": "PROCEDIMENTO COMUM CÍVEL" },
+    { "rito": "RITO ORDINÁRIO (COMUM)",   "area": "Cível",                  "classeCNJ": "PROCEDIMENTO COMUM CÍVEL" },
+    { "rito": "JUIZADO ESPECIAL ESTADUAL","area": "Juizado Especial Cível", "classeCNJ": "PROCEDIMENTO DO JUIZADO ESPECIAL CÍVEL" }
+  ],
+
+  "assuntoPrincipal": "Contratos Bancários",
+  "assuntoRamo": "",
+  "assuntosSecundarios": [],
+
+  "_nota_assuntoCodigoPorComarca": [
+    "Só entra aqui o que foi VERIFICADO na árvore daquela comarca.",
+    "02190338 = DIREITO CIVIL > Obrigações > Espécies de contratos > Contratos Bancários,",
+    "visto em Bonito / Juizado Especial Cível em 11/09/2026.",
+    "Campo Grande ainda não foi varrida — fica de fora até ser."
+  ],
+  "assuntoCodigoPorComarca": {
+    "Bonito": "02190338"
+  },
+
+  "nivelSigilo": "0",
+  "marcacoes": { "juizoDigital": true, "semInteresseConciliar": false },
+  "finalizacao": "salvar_distribuicao_futura",
+
+  "tipoAutorPadrao": "PF",
+  "tipoReuPadrao": "PJ",
+
+  "_nota_partesConhecidas": [
+    "Fallback: só é consultado quando a peça não traz o CPF/CNPJ no texto.",
+    "Os números abaixo não foram conferidos em fonte oficial, e não são risco silencioso:",
+    "a etapa 3 consulta o documento, o tribunal devolve o nome da base dele, e a conferência",
+    "trata divergência de nome de pessoa jurídica como GRAVE. Documento errado aborta na",
+    "primeira ação — não distribui 400 contra a parte errada.",
+    "BANCO AGIBANK veio da petição real de 23/07/2026."
+  ],
+  "partesConhecidas": {
+    "BANCO AGIBANK": "10664513000150",
+    "BANCO BRADESCO": "60746948000112",
+    "BANCO DO BRASIL": "00000000000191",
+    "BANCO SANTANDER": "90400888000142",
+    "CAIXA ECONOMICA FEDERAL": "00360305000104",
+    "ITAU UNIBANCO": "60701190000104"
+  },
+
+  "tiposDocumento": {
+    "PETIÇÃO INICIAL": { "sigilo": "0" },
+    "PROCURAÇÃO": { "sigilo": "0" },
+    "DOCUMENTO DE IDENTIFICAÇÃO": { "sigilo": "1" },
+    "COMPROVANTE DE RESIDÊNCIA": { "sigilo": "1" },
+    "DECLARAÇÃO": { "sigilo": "0" },
+    "DOCUMENTO": { "sigilo": "0" }
+  }
+}

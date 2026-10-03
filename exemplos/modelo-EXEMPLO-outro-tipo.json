@@ -1,0 +1,41 @@
+{
+  "nome": "EXEMPLO — ação de indenização por dano moral (para mostrar que o formato é genérico)",
+
+  "_nota": [
+    "Segundo modelo, de um tipo de ação completamente diferente do bancário, no MESMO formato.",
+    "Nada no código é específico de matéria: trocar de tipo de ação é trocar este arquivo.",
+    "",
+    "Repare que assuntoPrincipal aqui é ambíguo de propósito: 'Indenização por Dano Moral'",
+    "existe em pelo menos três ramos (Administrativo 010206, Civil 022003, Consumidor 060503).",
+    "O agente NÃO escolhe: para na primeira comarca, lista os três com o caminho de cada um,",
+    "e espera o advogado fixar. Uma decisão por comarca, não uma por ação.",
+    "",
+    "Se você já sabe o ramo, preencha assuntoRamo e a conferência passa a exigi-lo — mas",
+    "isso confere, não desempata: continuando ambíguo, continua parando."
+  ],
+
+  "preferenciaCompetencia": [
+    { "rito": "JUIZADO ESPECIAL ESTADUAL","area": "Juizado Especial Cível", "classeCNJ": "PROCEDIMENTO DO JUIZADO ESPECIAL CÍVEL" },
+    { "rito": "RITO ORDINÁRIO (COMUM)",   "area": "Cível",                  "classeCNJ": "PROCEDIMENTO COMUM CÍVEL" }
+  ],
+
+  "assuntoPrincipal": "Indenização por Dano Moral",
+  "assuntoRamo": "",
+  "assuntosSecundarios": [],
+  "assuntoCodigoPorComarca": {},
+
+  "nivelSigilo": "0",
+  "marcacoes": { "juizoDigital": true },
+  "finalizacao": "salvar_distribuicao_futura",
+
+  "tipoAutorPadrao": "PF",
+  "tipoReuPadrao": "PJ",
+  "partesConhecidas": {},
+
+  "tiposDocumento": {
+    "PETIÇÃO INICIAL": { "sigilo": "0" },
+    "PROCURAÇÃO": { "sigilo": "0" },
+    "DOCUMENTO DE IDENTIFICAÇÃO": { "sigilo": "1" },
+    "DOCUMENTO": { "sigilo": "0" }
+  }
+}

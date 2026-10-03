@@ -1,0 +1,26 @@
+[
+  {
+    "codigo": "02",
+    "texto": "DIREITO CIVIL",
+    "caminho": "DIREITO CIVIL",
+    "folha": false
+  },
+  {
+    "codigo": "0219",
+    "texto": "Obrigações",
+    "caminho": "DIREITO CIVIL > Obrigações",
+    "folha": false
+  },
+  {
+    "codigo": "021903",
+    "texto": "Espécies de contratos",
+    "caminho": "DIREITO CIVIL > Obrigações > Espécies de contratos",
+    "folha": false
+  },
+  {
+    "codigo": "02190338",
+    "texto": "Contratos Bancários",
+    "caminho": "DIREITO CIVIL > Obrigações > Espécies de contratos > Contratos Bancários",
+    "folha": true
+  }
+]

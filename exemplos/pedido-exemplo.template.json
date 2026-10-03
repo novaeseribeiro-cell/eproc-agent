@@ -1,0 +1,62 @@
+{
+  "id": "exemplo-template",
+  "tribunal": "tjms",
+  "acao": {
+    "comarca": "Bonito",
+    "rito": "JUIZADO ESPECIAL ESTADUAL",
+    "area": "Juizado Especial Cível",
+    "classeCNJ": "PROCEDIMENTO DO JUIZADO ESPECIAL CÍVEL",
+    "assuntoCodigo": "022003",
+    "assuntoPrincipal": "Indenização por Dano Moral",
+    "assuntoRamo": "DIREITO CIVIL",
+    "assuntosSecundarios": [],
+    "valorCausa": "5000,00",
+    "valorNaoSeAplica": false,
+    "nivelSigilo": "0"
+  },
+  "partes": {
+    "autores": [
+      {
+        "tipo": "PF",
+        "documento": "11144477735",
+        "nome": "ANTONIO CARLOS PEREIRA",
+        "principal": true,
+        "justicaGratuita": true,
+        "cadastrarSeNaoExistir": false
+      }
+    ],
+    "reus": [
+      {
+        "tipo": "PF",
+        "documento": "52998224725",
+        "nome": "BEATRIZ HELENA DOS SANTOS SOUZA",
+        "principal": true,
+        "cadastrarSeNaoExistir": false
+      }
+    ]
+  },
+  "documentos": [
+    {
+      "arquivo": "./saida/teste/peticao-inicial.pdf",
+      "tipo": "PETIÇÃO INICIAL",
+      "sigilo": "0"
+    },
+    {
+      "arquivo": "./saida/teste/procuracao.pdf",
+      "tipo": "PROCURAÇÃO",
+      "sigilo": "0"
+    }
+  ],
+  "marcacoes": {
+    "liminarTutela": false,
+    "juizoDigital": true,
+    "semInteresseConciliar": false
+  },
+  "limparResiduais": false,
+  "finalizacao": "parar",
+  "_nota": [
+    "TEMPLATE. CPFs sinteticos — nao existem na base do tribunal, entao este arquivo NAO roda como esta.",
+    "Copie para exemplos/pedido-exemplo.json (fora do versionamento) e troque pelas partes reais.",
+    "finalizacao 'parar' e limparResiduais false sao os padroes seguros: nao mexa sem motivo."
+  ]
+}

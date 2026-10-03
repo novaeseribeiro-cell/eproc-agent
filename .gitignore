@@ -1,0 +1,28 @@
+# dependencias e build
+node_modules
+dist/
+
+# NUNCA versionar: sessao do eproc (cookies e estado do certificado do advogado)
+.perfil-chromium
+
+# NUNCA versionar: segredos
+.env
+
+# NUNCA versionar: dado de cliente
+# saida/ tem prints das telas do eproc com nome e CPF das partes reais
+saida/
+# exemplos/amostra/ tem peticao real de cliente
+exemplos/amostra/
+# lote/ tem a planilha com partes, CPF e valores
+lote/
+
+# pedido com partes reais; o que vai para o repo e o .template.json
+exemplos/pedido-exemplo.json
+exemplos/amostra/pedido-*.json
+
+# lixo
+.DS_Store
+**/.DS_Store
+*.bak-*
+_antigos/
+**/_antigos/

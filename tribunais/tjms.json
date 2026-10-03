@@ -1,0 +1,378 @@
+{
+  "id": "tjms",
+  "nome": "TJMS - eproc 1º grau",
+  "baseUrl": "https://eproc1g.tjms.jus.br/eproc/",
+  "calibradoEm": "2026-09-11",
+  "urls": {
+    "login": "https://eproc1g.tjms.jus.br/eproc/",
+    "painel": "https://eproc1g.tjms.jus.br/eproc/controlador.php?acao=painel_adv_listar",
+    "peticaoInicial": "https://eproc1g.tjms.jus.br/eproc/controlador.php?acao=processo_cadastrar",
+    "menuTextual": "controlador.php?acao=menu_textual",
+    "peticoesPreparadas": "controlador.php?acao=peticao_inicial_preparada_listar",
+    "peticaoPreparadaCarregar": "controlador.php?acao=peticao_inicial_preparada_carregar&id_peticao_pendente=<ID>"
+  },
+  "seletores": {
+    "logado": [
+      "#btnProfile",
+      "#selInfraUnidades"
+    ],
+    "menuAbrir": [
+      "#menu-btn"
+    ],
+    "menuPeticaoInicial": [
+      "a[href*='acao=processo_cadastrar']"
+    ],
+    "menuTextual": [
+      "a[href*='acao=menu_textual']"
+    ],
+    "cancelarCadastro": [
+      "#btnCancelar"
+    ],
+    "comarca": [
+      "#selLocalidadeJudicial"
+    ],
+    "rito": [
+      "#selRitoProcesso"
+    ],
+    "area": [
+      "#selIdGrupoCompetencia"
+    ],
+    "classe": [
+      "#selIdClasseJudicial"
+    ],
+    "processoOriginario": [
+      "#txtProcessoOriginario"
+    ],
+    "nivelSigilo": [
+      "#selIdSigilo"
+    ],
+    "valorCausa": [
+      "#txtValorCausa"
+    ],
+    "valorNaoAplica": [
+      "#chkNaoAplicaValor"
+    ],
+    "valorRenuncia60SM": [
+      "#chkRenunciaValor"
+    ],
+    "valorAlcada": [
+      "#chkValorAlcada"
+    ],
+    "etapa1Proxima": [
+      "#btnSalvar[name='sbmProcessoEtapa1']"
+    ],
+    "assuntoRadio": [
+      "#rdoAssunto"
+    ],
+    "assuntoFiltro": [
+      "#txtFiltroPesquisa"
+    ],
+    "assuntoFiltrar": [
+      "#btnFiltrar"
+    ],
+    "assuntoPesquisar": [
+      "#btnPesquisar"
+    ],
+    "assuntoLimpar": [
+      "#btnLimpar"
+    ],
+    "assuntoArvore": [
+      "#divArvore"
+    ],
+    "assuntoNoAnchor": [
+      "#<codigoAssunto>_anchor"
+    ],
+    "assuntoOutro": [
+      "#txtDesAssunto"
+    ],
+    "assuntoIncluirOutro": [
+      "#btnIncluirAssunto"
+    ],
+    "etapa2Proxima": [
+      "#sbmProcessoEtapa2"
+    ],
+    "etapa2TramitacaoAgil": [
+      "#sbmProcessoEtapa2TA"
+    ],
+    "parteTipoPessoa": [
+      "#selTipoPessoa"
+    ],
+    "parteDocumento": [
+      "#txtCpfCnpj"
+    ],
+    "parteSemCpf": [
+      "#chkSemCpfCnpj"
+    ],
+    "parteSemCpfMotivo": [
+      "#selSemCpf"
+    ],
+    "parteSemCnpjMotivo": [
+      "#selSemCnpj"
+    ],
+    "parteNome": [
+      "#txtNome"
+    ],
+    "parteTipoFiltroNome": [
+      "#selTipoFiltroNome"
+    ],
+    "parteConsultar": [
+      "#btnConsultar"
+    ],
+    "parteConsultarNome": [
+      "#btnConsultarNome"
+    ],
+    "parteNovo": [
+      "#btnNovo"
+    ],
+    "parteResultadoLinha": [
+      "#tr0"
+    ],
+    "partePrincipal": [
+      "#selPrincipal0"
+    ],
+    "parteQualificacaoReu": [
+      "#selQualificacaoReu0"
+    ],
+    "parteIncluir": [
+      "#tr0 #btnIncluir"
+    ],
+    "parteJusticaGratuita": [
+      "select[id^='selJusticaAutor']"
+    ],
+    "partesProxima": [
+      "#btnProxima"
+    ],
+    "partesAnterior": [
+      "#btnAnterior"
+    ],
+    "novaPessoaCodSemCpf": [
+      "#selCodSemCpf"
+    ],
+    "novaPessoaNome": [
+      "#txtNome"
+    ],
+    "novaPessoaSexo": [
+      "#selSexo"
+    ],
+    "novaPessoaEstadoCivil": [
+      "#selEstCivil"
+    ],
+    "novaPessoaDataNascimento": [
+      "#txtDataNascimento"
+    ],
+    "novaPessoaNacionalidade": [
+      "#selNacionalidade"
+    ],
+    "novaPessoaProfissao": [
+      "#txtProfissao"
+    ],
+    "novaPessoaMae": [
+      "#txtMae"
+    ],
+    "novaPessoaPai": [
+      "#txtPai"
+    ],
+    "novaPessoaUfNaturalidade": [
+      "#selUfNaturalidade"
+    ],
+    "novaPessoaLocalidadeNaturalidade": [
+      "#selLocalidadeNaturalidade"
+    ],
+    "novaPessoaLgbti": [
+      "#selLgbti"
+    ],
+    "novaPessoaIdentidadeGenero": [
+      "#selIdentidadeGenero"
+    ],
+    "novaPessoaOrientacaoSexual": [
+      "#selOrientacaoSexual"
+    ],
+    "novaPessoaEtnia": [
+      "#selTipoEtnia"
+    ],
+    "novaPessoaEscolaridade": [
+      "#selEscolaridade"
+    ],
+    "novaPessoaDocTipo": [
+      "#selTipoIdent"
+    ],
+    "novaPessoaDocPrincipal": [
+      "#txtIdentPrinc"
+    ],
+    "novaPessoaDocIncluir": [
+      "#btnIncDoc"
+    ],
+    "novaPessoaEndTipo": [
+      "#selTipoEnd"
+    ],
+    "novaPessoaEndCep": [
+      "#txtCep"
+    ],
+    "novaPessoaEndLogradouro": [
+      "#txtEndLog"
+    ],
+    "novaPessoaEndNumero": [
+      "#txtEndNum"
+    ],
+    "novaPessoaEndComplemento": [
+      "#txtEndComp"
+    ],
+    "novaPessoaEndBairro": [
+      "#txtBairro"
+    ],
+    "novaPessoaEndPais": [
+      "#selPais"
+    ],
+    "novaPessoaEndUf": [
+      "#selUf"
+    ],
+    "novaPessoaEndCidade": [
+      "#selLocalidade"
+    ],
+    "novaPessoaEndIncluir": [
+      "#btnIncEnd"
+    ],
+    "novaPessoaContatoTipo": [
+      "#selTipoCont"
+    ],
+    "novaPessoaContato": [
+      "#txtContato"
+    ],
+    "novaPessoaContatoIncluir": [
+      "#btnIncCont"
+    ],
+    "novaPessoaSalvar": [
+      "button[value='Salvar']"
+    ],
+    "novaPessoaVoltar": [
+      "#btnVoltar"
+    ],
+    "docArquivo": [
+      "input[type='file'][name='file']",
+      "input[type='file']"
+    ],
+    "docTipo": [
+      "input[id^='txtTipo_']"
+    ],
+    "docSigilo": [
+      "select[id^='selIdSigilo_']"
+    ],
+    "docEnviar": [
+      "#btnEnviarArquivos"
+    ],
+    "docTabela": [
+      "#tbDocumentosCadastradas"
+    ],
+    "docTabelaLinha": [
+      "#tbDocumentosCadastradas tr"
+    ],
+    "docNumDocumentos": [
+      "#hdnNumDocumentos"
+    ],
+    "docExcluirLink": [
+      "a.btnExcluirDocumento"
+    ],
+    "chkLiminarTutela": [
+      "#chkCautAntecTutela"
+    ],
+    "chkDoencaGrave": [
+      "#chkDoencaGrave"
+    ],
+    "chkIdoso": [
+      "#chkIdosoVisual"
+    ],
+    "chkDeficiente": [
+      "#chkDeficiente"
+    ],
+    "chkCrianca": [
+      "#chkCrianca"
+    ],
+    "chkLei14289": [
+      "#chkPessoaLei14289"
+    ],
+    "chkJuizoDigital": [
+      "#chkJuizoDigital"
+    ],
+    "chkSemInteresseConciliar": [
+      "#chkManifestaDesinteresse334"
+    ],
+    "btnSalvarDistribuicaoFutura": [
+      "#btnSalvarDistribuicao"
+    ],
+    "modalConfirmacaoIframe": [
+      "#ifrSubFrm"
+    ],
+    "modalConfirmarPreparacao": [
+      "#sbmConfirmar"
+    ],
+    "modalCancelar": [
+      "#btnFechar"
+    ],
+    "btnRetornarEtapaInicial": [
+      "button:has-text('Retornar para Etapa Inicial')"
+    ],
+    "btnFinalizarPROIBIDO": [
+      "#btnSalvar[name='sbmProcessoEtapa4']"
+    ],
+    "painelPendenciasProcessosAdvogado": [
+      "a[href*='acao=peticao_inicial_preparada_listar']"
+    ],
+    "preparadaLinha": [
+      "tr[id^='lnkInfraID-'], tr:has(input#chkInfraItem0)"
+    ],
+    "preparadaCheckbox": [
+      "input.infraCheckbox[id^='chkInfraItem']"
+    ],
+    "preparadaCarregar": [
+      "a[href*='peticao_inicial_preparada_carregar']"
+    ],
+    "preparadaExcluir": [
+      "a[onclick^='acaoDesativar']"
+    ],
+    "preparadaDistribuirPROIBIDO": [
+      "#btnDistribuir"
+    ]
+  },
+  "funcoesPagina": {
+    "excluirDocumento": "excluirDocumento(rowIndex, idDocumento, nomeArquivo, numBytes, idMinuta) - chama alert_excluir() que usa confirm(). SEM aceitar o diálogo, retorna false e NADA é excluído.",
+    "alert_excluir": "confirm('Confirma exclusão do Documento \"<nome>\"?')",
+    "confirmacaoFinalizarProcessoAdvogado": "onclick de #btnSalvarDistribuicao. Seta #hdnAcaoFutura e abre exibirSubFrm('...processo_confirmacao_finalizar_subfrm&acao_futura=1') em #ifrSubFrm. NÃO salva sozinho.",
+    "confirmacaoParaFinalizarProcesso": "onclick de #btnSalvar[name=sbmProcessoEtapa4] (Finalizar). PROIBIDO.",
+    "confirmaAjuizamento": "onclick de #sbmConfirmar dentro do iframe. É o que efetivamente grava a petição preparada.",
+    "distribuirPeticaoInicialPreparada": "onclick de #btnDistribuir na lista de preparadas. ATO DO ADVOGADO. PROIBIDO ao agente.",
+    "validarFrm": "onclick de #btnNovo e #btnConsultar na etapa de partes. Usa alert() e a trava global bolValidarFrmRunning."
+  },
+  "assuntosConhecidos": {
+    "022003": "INDENIZAÇÃO POR DANO MORAL, RESPONSABILIDADE CIVIL, DIREITO CIVIL",
+    "010206": "Indenização por Dano Moral - DIREITO ADMINISTRATIVO E OUTRAS MATÉRIAS DE DIREITO PÚBLICO > Responsabilidade da Administração",
+    "060503": "Indenização por Dano Moral - DIREITO DO CONSUMIDOR > Responsabilidade do Fornecedor",
+    "02190338": "DIREITO CIVIL > Obrigacoes > Especies de contratos > Contratos Bancarios (verificado em Bonito / Juizado Especial Civel, 11/09/2026)"
+  },
+  "observacoes": [
+    "Recalibrado por navegação manual em 11/09/2026 (perfil de navegador limpo, sessão do próprio Roney).",
+    "btnFinalizarPROIBIDO (#btnSalvar[name=sbmProcessoEtapa4]) é o botão que PROTOCOLA. Nunca clicar.",
+    "preparadaDistribuirPROIBIDO (#btnDistribuir) é o botão que DISTRIBUI as petições preparadas. Nunca clicar. É o ato do advogado.",
+    "ETAPA 2 / ASSUNTO: a árvore é jsTree no container #divArvore, com IDs de nó que são o próprio código CNJ do assunto. Selecionar por API é determinístico e dispensa digitar tecla a tecla: jQuery.jstree.reference('#divArvore').deselect_all(); .open_node('<paiCod>'); .select_node('<cod>'). Conferir sempre #txtDesAssunto depois. Só então #btnIncluirAssunto.",
+    "ETAPA 2: existe #sbmProcessoEtapa2TA (Tramitação Ágil) ao lado do Próxima. Não usar sem decisão do advogado.",
+    "ETAPA 1: ao escolher a classe, aparecem os campos #txtProcessoOriginario e Juízo abaixo do Nível de Sigilo. Isso DESLOCA o campo Valor da Causa para baixo. Nunca clicar por coordenada nessa tela; focar por id.",
+    "ETAPA 1: clicar Próxima com valor preenchido funciona; o valor usa vírgula decimal (5000,00).",
+    "ETAPA 3/4: #txtCpfCnpj é LIMPO pelo sistema após o Consultar. Para clicar em Novo em seguida é preciso repreencher o CPF, senão validarFrm() dispara alert('Informe o CPF.') e nada acontece.",
+    "ETAPA 3/4: validarFrm usa a trava global bolValidarFrmRunning. Se um alert for dispensado no meio, a trava pode ficar presa e o botão para de responder. Resetar antes de reclicar.",
+    "QUALIFICAÇÃO DO RÉU em Bonito / Juizado Especial Cível / Procedimento do JEC: a única opção de #selQualificacaoReu0 é 'RÉU' (valor 52). A anotação antiga de que no juizado seria 'REQUERIDO' está ERRADA. Manter a regra de ler as opções e usar a única quando houver só uma.",
+    "TELA NOVO (Cadastro de Pessoa): abre no mesmo tab, título ':: eproc - - Cadastro de Pessoa ::'. 40 campos visíveis para pessoa física. Obrigatórios de verdade (label .infraLabelObrigatorio): Nome, Sexo, Estado Civil, Data de Nascimento, Nacionalidade. Profissão, Nome Mãe, Nome Pai, Naturalidade, RG e Escolaridade são opcionais. LGBTI, Identidade de Gênero e Orientação Sexual já vêm com default 'Não informado' e não travam o salvamento.",
+    "TELA NOVO: Documentos, Dependentes, Endereço e Contato são sub-formulários com botão Incluir próprio (#btnIncDoc, #btnIncDependente, #btnIncEnd, #btnIncCont). Os campos marcados como obrigatórios dentro deles só valem se o bloco for usado. Sair pelo #btnVoltar NÃO salva nada.",
+    "DOCUMENTOS PRESOS: a etapa 5 tem a tabela 'Documentos selecionados e ainda não utilizados em movimentação' (#tbDocumentosCadastradas). Ela é SERVER-SIDE, presa à conta do usuário, e sobrevive a Cancelar, a troca de sessão e a troca de navegador. Confirmado em 11/09/2026: num perfil de navegador novo, um cadastro novo nasceu com relatorio-16.pdf (07/09) e procuracao.pdf (08/09) já na tabela.",
+    "CAUSA RAIZ do 'X não exclui': excluirDocumento() chama confirm(). O Playwright dispensa diálogos por padrão, então o confirm retorna false e a exclusão nunca é enviada. CORREÇÃO: registrar page.on('dialog', d => d.accept()) ANTES de clicar em a.btnExcluirDocumento. Validado à mão em 11/09/2026: com o confirm aceito, os dois arquivos foram excluídos e #hdnNumDocumentos foi a 0.",
+    "GUARDA DE RASCUNHO: a pendência NÃO aparece no painel antes de o processo ser preparado, e não existe item de menu para 'processos não protocolados'. O que o agente deve checar antes de rodar é (a) a contagem 'Processos pendentes do advogado' no painel, que aponta para peticao_inicial_preparada_listar, e (b) a tabela de documentos ao chegar na etapa 5, abortando se #hdnNumDocumentos != 0 antes do primeiro upload.",
+    "SALVAR PARA DISTRIBUIÇÃO FUTURA: #btnSalvarDistribuicao NÃO salva direto. Abre o iframe #ifrSubFrm com o 'Resumo das Informações' (comarca, rito, classe, sigilo, assunto, partes, distribuição preparada para, documentos) e a pergunta 'Confirmar a preparação do ajuizamento do processo?'. Só #sbmConfirmar (Finalizar preparação) grava. Esse resumo é o melhor artefato de conferência do agente: capturar print dele antes de confirmar.",
+    "ACEITA SEM DOCUMENTOS: em 11/09/2026 a preparação foi gravada com a tabela de documentos vazia. O eproc NÃO valida a presença da peça nesse momento. O agente precisa validar por conta própria.",
+    "ONDE A AÇÃO PREPARADA APARECE: Painel do Advogado > Área de trabalho > Pendências > 'Processos pendentes do advogado' (0 -> 1). O link é controlador.php?acao=peticao_inicial_preparada_listar, tela ':: eproc - - Petições Iniciais pendentes de distribuição ::'. Colunas: Autor, Réu, Assunto, Data da Criação, Criado por, Ações. Por linha: checkbox de seleção (#chkInfraItem<N>), 'Carregar os dados da petição' (peticao_inicial_preparada_carregar&id_peticao_pendente=<ID>) e 'Excluir Petição' (acaoDesativar('<ID>','petição')). No rodapé: #btnDistribuir (distribuirPeticaoInicialPreparada) e #btnVoltar.",
+    "ARQUITETURA DO PRODUTO: a fila de preparadas com checkbox + botão Distribuir único é exatamente o desenho que o art. 12 da Res. 383/2025 pede. O agente prepara N ações, o advogado abre essa tela, confere e distribui. Não precisa inventar fila fora do tribunal para essa etapa.",
+    "IA NATIVA DO TJMS: a tela de Petição Inicial já carrega urlExtracaoPeticaoInicial (extracao_peticao_inicial/extrair) e inteligencia_artificial/peticao_inicial/modal_termo_adesao. O próprio eproc passou a extrair dados da petição por IA, mediante termo de adesão. Avaliar impacto no posicionamento do produto antes de vender.",
+    "hdnPeticaoInicialLocalStorage guarda os campos da etapa 1 em localStorage do navegador. É só conveniência de formulário, não é o rascunho preso.",
+    "SESSÃO: a tela de login avisa que acesso simultâneo do mesmo usuário em várias máquinas é tratado como robô e pode bloquear o usuário. Nunca manter duas sessões abertas ao mesmo tempo (navegador do advogado + navegador do agente).",
+    "docTipo (txtTipo_N) é campo de texto com autocomplete: preencher por teclado e conferir o Tipo Documento na tabela após enviar.",
+    "CODIGO DE ASSUNTO TEM PROFUNDIDADE VARIAVEL: 2 digitos por nivel. \"022003\" tem 3 niveis; \"02190338\" tem 4. O schema exige pares de digitos (2 a 6 niveis), nao 6 digitos fixos — isso quebrou na primeira vez que um assunto de 4 niveis apareceu. Ao selecionar, abrir TODOS os ancestrais, nao so o pai imediato.",
+    "Em Bonito / Juizado Especial Civel, \"Contratos Bancarios\" existe SO sob DIREITO CIVIL (02190338). Nao ha no equivalente sob DIREITO DO CONSUMIDOR nessa area. O modelo-bancaria.json declarava ramo DIREITO DO CONSUMIDOR e abortaria na conferencia da etapa 2."
+  ]
+}
