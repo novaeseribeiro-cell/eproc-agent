@@ -31,6 +31,8 @@ let modoConferencia = false;
  * Necessario porque Ctrl+C encerra o Node E o Chromium filho (a aba some junto).
  */
 export function entrarModoConferencia() { modoConferencia = true; }
+/** So o agente trabalhando aceita dialogos sozinho. Login e conferencia sao do advogado. */
+export function sairModoConferencia() { modoConferencia = false; }
 
 function perguntarNoTerminal(texto: string): Promise<boolean> {
   return new Promise((r) => {

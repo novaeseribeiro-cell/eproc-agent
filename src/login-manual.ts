@@ -1,5 +1,6 @@
 import type { Page } from "playwright";
 import type { PerfilTribunal } from "./types.js";
+import { entrarModoConferencia, sairModoConferencia } from "./browser.js";
 
 /** Logado = estamos no controlador.php interno (nao no externo_controlador de login). */
 export const logado = (page: Page) =>
@@ -7,6 +8,9 @@ export const logado = (page: Page) =>
 
 export async function loginManual(page: Page, perfil: PerfilTribunal) {
   if (logado(page)) { console.log("[eproc-agent] sessao ativa:", page.url()); return; }
+  // Enquanto o advogado mexe na tela para logar, nenhum confirm() e aceito sozinho.
+  // Visto em 03/10: duas "Confirma desativacao da peticao?" aceitas pelo agente durante o login.
+  entrarModoConferencia();
   // Nunca navegar para URL interna sem hash: o eproc responde "Link sem assinatura" e derruba a sessao.
   await page.goto(perfil.urls.login, { waitUntil: "domcontentloaded" }).catch(() => {});
   console.log("[eproc-agent] Faca login no navegador. Quando o PAINEL DO ADVOGADO estiver aberto, pressione ENTER aqui.");
@@ -17,5 +21,6 @@ export async function loginManual(page: Page, perfil: PerfilTribunal) {
   }
   // Sem isto o stdin fica aberto e o node nao termina depois de "Salvo em ..." — o terminal parece travado.
   process.stdin.pause();
+  sairModoConferencia();
   console.log("[eproc-agent] sessao confirmada:", page.url());
 }
