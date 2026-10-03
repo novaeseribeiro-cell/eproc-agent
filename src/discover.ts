@@ -27,6 +27,7 @@ const SCRIPT = `(() => {
 export async function descobrirCampos(page: Page, perfil: PerfilTribunal, arquivoSaida: string) {
   console.log("Navegue manualmente ate a tela que quer mapear e pressione ENTER no terminal...");
   await new Promise<void>((r) => process.stdin.once("data", () => r()));
+  process.stdin.pause();
   const campos = await page.evaluate(SCRIPT);
   const saida = { url: page.url(), titulo: await page.title(), tribunal: perfil.id, campos };
   writeFileSync(arquivoSaida, JSON.stringify(saida, null, 2));

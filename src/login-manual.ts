@@ -15,5 +15,7 @@ export async function loginManual(page: Page, perfil: PerfilTribunal) {
     if (logado(page)) break;
     console.log("[eproc-agent] ainda em", page.url(), "- conclua o login e pressione ENTER de novo.");
   }
+  // Sem isto o stdin fica aberto e o node nao termina depois de "Salvo em ..." — o terminal parece travado.
+  process.stdin.pause();
   console.log("[eproc-agent] sessao confirmada:", page.url());
 }
