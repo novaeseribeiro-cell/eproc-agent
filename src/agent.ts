@@ -3,7 +3,7 @@ import { resolve, basename } from "node:path";
 import { existsSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { achar, existe, selecionarPorTexto, esperarOpcoes, screenshot, dialogosAceitos, marcaDialogos, dialogosDesde } from "./browser.js";
 import { EtapaError, type Pedido, type PerfilTribunal, type Parte, type Etapa } from "./types.js";
-import { carregar, garantirComarca } from "./catalogo.js";
+import { carregar, garantirComarca, validar } from "./catalogo.js";
 
 export interface Relatorio {
   pedidoId: string;
@@ -237,6 +237,24 @@ export async function listarAssuntos(
 
   await abrirPeticaoInicial(page, perfil);
   await esperarTitulo(page, "1 de 5", "dados_acao");
+
+  // Comarca nunca vista: cataloga aqui, com a tela 1 aberta (mesmo caminho do preparar).
+  // Depois confere o pedido contra o catalogo: rito/area/classe so por correspondencia EXATA.
+  // Se nao bater, cancela o cadastro e devolve as opcoes que o tribunal oferece — nao chuta.
+  const cat = carregar(pedido.tribunal);
+  const { capturadaAgora } = await garantirComarca(page, perfil, pedido.acao.comarca, cat);
+  if (capturadaAgora) console.log(`[catalogo] "${pedido.acao.comarca}" catalogada nesta execucao (catalogo/${pedido.tribunal}.json)`);
+  const erros = validar(cat, pedido.acao);
+  if (erros.length) {
+    await (await achar(page, perfil, "cancelarCadastro", "dados_acao")).click().catch(() => {});
+    await page.waitForTimeout(2000);
+    throw new EtapaError(
+      "dados_acao", "competencia",
+      `o pedido nao bate com o que o tribunal oferece em ${pedido.acao.comarca}. Ajuste rito/area/classe do pedido com o rotulo EXATO:\n  - ` +
+        erros.join("\n  - "),
+    );
+  }
+
   await etapa1(page, perfil, pedido, rel);
   await (await achar(page, perfil, "etapa1Proxima", "dados_acao")).click();
   await esperarTitulo(page, "2 de 5", "assuntos");
