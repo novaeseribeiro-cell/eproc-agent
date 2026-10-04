@@ -148,6 +148,11 @@ async function varrer(raiz: string, modeloPath: string) {
       linha.observacoes = [ex.observacoes, ...pend].filter(Boolean).join(" | ");
       linha.aprovado = pend.length === 0 && (ex.confianca ?? 0) >= 0.85 ? "sim" : "";
       console.log(`[lote] ${basename(pasta)}: ${linha.comarca} | ${autores.map((p) => p.nome).join(", ")} x ${reus.map((p) => p.nome).join(", ")} | R$ ${linha.valor_causa} | ${linha.aprovado ? "ok" : "CONFERIR"}`);
+      // Mostra o MOTIVO no terminal (sem CPF: as pendencias citam nome, nunca numero).
+      if (!linha.aprovado) {
+        const motivos = pend.length ? pend : [`confianca da extracao ${ex.confianca ?? "?"} (minimo 0,85)`];
+        for (const m of motivos) console.log(`         - ${m}`);
+      }
     } catch (e: any) {
       linha.observacoes = `ERRO NA EXTRACAO: ${e.message}`;
       console.log(`[lote] ${basename(pasta)}: ${linha.observacoes}`);
