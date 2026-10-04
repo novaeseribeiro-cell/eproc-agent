@@ -51,7 +51,8 @@ autores e reus sao LISTAS: inclua TODOS os do polo, na ordem em que a peca traz,
 documento = CPF ou CNPJ, so digitos, string vazia se a peca nao trouxer;
 nascimento no formato dd/mm/aaaa, null se a peticao nao trouxer;
 assuntoDeclarado = como a propria peticao nomeia a acao, na letra dela, sem traduzir para o vocabulario do CNJ;
-pendencias = lista de strings com o que faltou ou ficou ambiguo (ex.: "CPF do autor ausente"); lista vazia se nada faltou;
+pendencias = SOMENTE o que impede ou arrisca o CADASTRO no eproc: comarca ou rito incertos, parte sem nome, CPF/CNPJ ausente ou ilegivel, valor da causa ausente ou ambiguo, mais de um valor possivel (ex.: "CPF do autor ausente"); lista vazia se nada disso faltou;
+NAO sao pendencia (vao em observacoes, se quiser): numero da vara em branco no enderecamento (e normal, a distribuicao sorteia), data de nascimento ausente, numero de contrato, dados de merito, tabelas ou imagens que nao vieram no texto;
 confianca entre 0 e 1 refletindo a certeza global; observacoes com o que ficou ambiguo. Nunca invente: use null quando o texto nao trouxer o dado.`;
 
 export async function extrairDaPeticao(texto: string): Promise<Extraido> {
