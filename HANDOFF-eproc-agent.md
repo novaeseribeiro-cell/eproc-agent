@@ -660,3 +660,27 @@ Atencao ao movimento novo: o eproc do TJMS ja embarcou IA de extracao de peticao
 (`extracao_peticao_inicial/extrair`, com termo de adesao). Extrair dados da peticao esta deixando de ser
 diferencial. O que continua sendo nosso: cadastrar em lote, com os documentos do escritorio, sem entregar
 credencial a ninguem, parando antes do ato.
+
+---
+
+### Sessao de 03-04/10/2026 — primeira rodada real feita; lote PAUSADO pelo Roney
+
+**Feito e provado em campo (TJMS, Campo Grande):**
+- Os 3 bloqueios do briefing resolvidos: chave da API preenchida pelo Roney (Sonnet 5.5, `claude-sonnet-5-5`),
+  Campo Grande catalogada, assunto fixado pelo advogado: `CAMPO GRANDE|CIVEL BANCARIA|CONTRATOS BANCARIOS -> 02190338`.
+- `preparar` da amostra chegou a etapa 5 (status `pronto_para_conferencia`), sem Finalizar.
+- `lote:varrer` da amostra: comarca, partes e valor (R$ 2815,28) extraidos certo.
+
+**Correcoes desta sessao (commits 22ea897..4a34af3):**
+- `assuntos`: cataloga a comarca antes; abre ramos fechados um por vez com checagem de coerencia
+  (o eproc as vezes devolve filhos errados no carregamento sob demanda); caminho montado pelo codigo CNJ.
+- CLI: libera o stdin depois do ENTER (o processo nao terminava). Colar dois comandos juntos fazia o 2o virar o ENTER do 1o.
+- `preparar` termina em MODO CONFERENCIA: nenhum dialogo e aceito sozinho, cada confirm vai ao terminal (s+ENTER).
+  Encerra ao fechar a janela. Ctrl+C mata o Chromium junto (mesmo grupo de processos) — NAO usar.
+- Login manual tambem em modo conferencia (em 03/10 duas "Confirma desativacao da peticao?" foram aceitas sozinhas).
+- `extrair`: le a inicial inteira (inicio + fim; o valor da causa fica no fim); pendencia so o que afeta o cadastro.
+- `lote:varrer` mostra no terminal o motivo de cada CONFERIR.
+
+**Proximo passo (quando o Roney retomar):** lote real de 3 a 5 acoes em `~/Acoes/acao-00N/` (uma subpasta por acao),
+clientes ja cadastrados no eproc (P5 parte nova continua sem prova em campo). Avaliar `limparResiduais: true`
+no modelo para o lote: PDF residual da etapa 5 fica preso na conta e trava a acao seguinte.
