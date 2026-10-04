@@ -1,11 +1,22 @@
 import { readFileSync } from "node:fs";
 
-/** Texto de um PDF (primeiras N paginas bastam para inicial/procuracao). */
-export async function textoPdf(caminho: string, maxPaginas = 6): Promise<string> {
+/**
+ * Texto de um PDF. Com `maxPaginas`, so as primeiras paginas (classificar documento).
+ * Sem ele, a peca inteira: o VALOR DA CAUSA e os pedidos ficam no FIM da inicial, e ler so as
+ * 6 primeiras paginas deixava valor_causa vazio (visto em 04/10 na amostra de Campo Grande).
+ */
+export async function textoPdf(caminho: string, maxPaginas = 0): Promise<string> {
   const mod: any = await import("pdf-parse");
   const pdfParse = mod.default ?? mod;
-  const data = await pdfParse(readFileSync(caminho), { max: maxPaginas });
+  const data = await pdfParse(readFileSync(caminho), maxPaginas ? { max: maxPaginas } : {});
   return (data.text || "").replace(/\s+\n/g, "\n").trim();
+}
+
+/** Inicio (enderecamento, partes) + fim (pedidos, valor da causa) dentro do limite de caracteres. */
+export function inicioEFim(texto: string, limite = 24000): string {
+  if (texto.length <= limite) return texto;
+  const cabeca = Math.floor(limite * 0.6);
+  return texto.slice(0, cabeca) + "\n\n[... trecho do meio omitido ...]\n\n" + texto.slice(-(limite - cabeca));
 }
 
 export interface Extraido {
@@ -50,8 +61,8 @@ export async function extrairDaPeticao(texto: string): Promise<Extraido> {
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
-    body: JSON.stringify({ model, max_tokens: 800, system: SISTEMA,
-      messages: [{ role: "user", content: `TEXTO DA PETICAO:\n\n${texto.slice(0, 20000)}` }] }),
+    body: JSON.stringify({ model, max_tokens: 1500, system: SISTEMA,
+      messages: [{ role: "user", content: `TEXTO DA PETICAO:\n\n${inicioEFim(texto)}` }] }),
   });
   if (!r.ok) throw new Error(`API Anthropic ${r.status}: ${(await r.text()).slice(0, 300)}`);
   const j: any = await r.json();
