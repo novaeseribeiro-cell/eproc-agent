@@ -46,7 +46,7 @@ confianca entre 0 e 1 refletindo a certeza global; observacoes com o que ficou a
 export async function extrairDaPeticao(texto: string): Promise<Extraido> {
   const key = process.env.ANTHROPIC_API_KEY;
   if (!key) throw new Error("ANTHROPIC_API_KEY nao definida no .env");
-  const model = process.env.CLAUDE_MODEL || "claude-sonnet-5";
+  const model = process.env.CLAUDE_MODEL || "claude-sonnet-5-5";
   const r = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "content-type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01" },
